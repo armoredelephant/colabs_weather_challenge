@@ -22,12 +22,13 @@ Each row in the list should display:
 - Clone the repo with ```git clone https://github.com/armoredelephant/colabs_weather_challenge.git```
 - Using a terminal navigate to the repo
 - Start the app with yarn or npm
-**npm**
+
+**npm:**
 ```
 npm start
 ```
 
-**yarn**
+**yarn:**
 ```
 yarn start
 ```
