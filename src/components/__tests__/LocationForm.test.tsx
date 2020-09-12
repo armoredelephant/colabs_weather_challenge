@@ -2,10 +2,6 @@ import React from "react";
 import { act, cleanup, fireEvent, render } from "@testing-library/react";
 import LocationForm from "../LocationForm";
 
-beforeEach(() => {
-  jest.resetAllMocks();
-});
-
 afterEach(() => {
   cleanup();
 });
@@ -29,7 +25,7 @@ describe("<LocationForm />", () => {
       fireEvent.submit(await findByTestId("_LocationForm_form"));
     });
 
-    expect(setZipcode).toHaveBeenCalled();
+    expect(setZipcode).toHaveBeenCalledTimes(1);
     expect(locationForm).toBeDefined();
   });
 
@@ -49,7 +45,7 @@ describe("<LocationForm />", () => {
       fireEvent.submit(await findByTestId("_LocationForm_form"));
     });
 
-    expect(setZipcode).not.toHaveBeenCalled();
+    expect(setZipcode).not.toHaveBeenCalledTimes(0);
     expect(locationForm).toBeDefined();
   });
 });

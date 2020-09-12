@@ -13,15 +13,14 @@ const StyledButton = styled.button`
 
 interface Props {
   text: string;
-  type: "button" | "submit" | "reset" | undefined;
 }
 
-const Button: React.FC<Props> = ({ text, type }) => {
+const SetZipcodeButton: React.FC<Props> = ({ text }) => {
   return (
-    <StyledButton className="button" data-testid="_Button_" type={type}>
+    <StyledButton className="button" data-testid="_Button_" type="submit">
       {text}
     </StyledButton>
   );
 };
 
-export default Button;
+export default SetZipcodeButton;
