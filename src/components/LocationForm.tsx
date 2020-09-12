@@ -2,7 +2,7 @@ import React, { SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 // import styled from "styled-components";
 
-import Button from "./reusable/Button";
+import SetZipcodeButton from "./SetZipcodeButton";
 
 interface Props {
   setZipcode: React.Dispatch<SetStateAction<string | null>>;
@@ -21,13 +21,13 @@ const LocationForm: React.FC<Props> = ({ setZipcode }) => {
 
   const onSubmit = ({ zipcode }: any) => {
     const validZipcode = parseInt(zipcode);
+    console.log(validZipcode, zipcode);
 
-    if (!validZipcode) {
-      console.log("Invalid zipcode.");
-      return;
+    if (validZipcode) {
+      return setZipcode(zipcode);
     }
 
-    setZipcode(zipcode);
+    console.log("Invalid zipcode");
   };
 
   return (
@@ -42,7 +42,7 @@ const LocationForm: React.FC<Props> = ({ setZipcode }) => {
           data-testid="_LocationForm_zipcode"
           ref={register}
         />
-        <Button type="submit" text="show forecasts" />
+        <SetZipcodeButton text="show forecasts" />
       </form>
     </div>
   );

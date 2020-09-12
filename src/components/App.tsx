@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LocationForm from "./LocationForm";
+import ForecastDisplay from "./ForecastDisplay";
 
 /**
  * display main temp component if zipcode is set
@@ -15,9 +16,7 @@ const App: React.FC = () => {
   return (
     <div data-testid="_App_">
       <LocationForm setZipcode={setZipcode} />
-      {/* {zipcode && (
-        <ForcastDisplay />
-      )} */}
+      {zipcode && <ForecastDisplay />}
     </div>
   );
 };
