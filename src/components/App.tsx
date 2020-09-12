@@ -10,13 +10,20 @@ import ForecastDisplay from "./ForecastDisplay";
  * default to current
  */
 
+export const ZipcodeContext = React.createContext<string | null>(null);
+
 const App: React.FC = () => {
   const [zipcode, setZipcode] = useState<string | null>(null);
+  const { Provider } = ZipcodeContext;
   console.log(zipcode);
   return (
     <div data-testid="_App_">
       <LocationForm setZipcode={setZipcode} />
-      {zipcode && <ForecastDisplay />}
+      {zipcode && (
+        <Provider value={zipcode}>
+          <ForecastDisplay />
+        </Provider>
+      )}
     </div>
   );
 };

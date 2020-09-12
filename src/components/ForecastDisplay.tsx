@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { ForecastType } from "./_types";
 import ForecastChanger from "./ForecastChanger";
 import { ForecastButtonElement } from "./_types";
+import ForecastList from "./ForecastList";
 
-const Container = styled.div`
+const Container = styled.main`
   width: 100%;
   padding: 2.5rem;
   display: flex;
@@ -34,7 +35,7 @@ const ForecastDisplay: React.FC = () => {
           forecastType={forecastType}
           handleForecast={handleForecastType}
         />
-        {/* <ForecaseList /> */}
+        <ForecastList forecastType={forecastType} />
       </Wrapper>
     </Container>
   );
