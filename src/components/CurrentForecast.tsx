@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ZipcodeContext } from "./App";
 import { getCurrentWeather } from "./utils/fetchers";
 import styled from "styled-components";
+import { errorContext, zipcodeContext } from "./utils/context";
 
 /**
  * Data/Time/Location
@@ -51,42 +51,48 @@ const ForecastCondition = styled.div`
 const CurrentForecast: React.FC = () => {
   const [forecast, setForecast] = useState<any | undefined>(undefined);
   const [status, setStatus] = useState<"fetching" | "fetched" | null>(null);
-  const zipcode = useContext(ZipcodeContext);
+  const { setCurrentError } = useContext(errorContext);
+  const { setCurrentZipcode, zipcode } = useContext(zipcodeContext);
 
   useEffect(() => {
     if (!zipcode) return;
     const fetchData = async () => {
       setStatus("fetching");
 
-      const data = await getCurrentWeather(zipcode);
+      try {
+        const data = await getCurrentWeather(zipcode);
 
-      console.log(data);
+        console.log(data);
 
-      // date and time
-      const date = new Date(data.dt * 1000);
-      const time = date.setTime(date.getTime() + data.timezone * 1000);
-      const timezoneDate = new Date(time).toString();
+        // date and time
+        const date = new Date(data.dt * 1000);
+        const time = date.setTime(date.getTime() + data.timezone * 1000);
+        const timezoneDate = new Date(time).toString();
 
-      // temp
-      const temp = data.main.temp;
+        // temp
+        const temp = data.main.temp;
 
-      // icon
-      const icon = data.weather[0].icon;
+        // icon
+        const icon = data.weather[0].icon;
 
-      const forecastData = {
-        iconUrl: `http://openweathermap.org/img/w/${icon}.png`,
-        weatherCon: data.weather[0].main,
-        temp: temp,
-        date: timezoneDate,
-      };
+        const forecastData = {
+          iconUrl: `http://openweathermap.org/img/w/${icon}.png`,
+          weatherCon: data.weather[0].main,
+          temp: temp,
+          date: timezoneDate,
+        };
 
-      setForecast(forecastData);
+        setForecast(forecastData);
+      } catch (error) {
+        setCurrentZipcode(null);
+        setCurrentError(error);
+      }
 
       setStatus("fetched");
     };
 
     fetchData();
-  }, [zipcode]);
+  }, [setCurrentError, setCurrentZipcode, zipcode]);
 
   return (
     <>

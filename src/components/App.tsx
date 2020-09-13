@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import LocationForm from "./LocationForm";
 import ForecastDisplay from "./ForecastDisplay";
+import { useError, useZipcode } from "./utils/hooks";
+import { errorContext, zipcodeContext } from "./utils/context";
 
 /**
  * display main temp component if zipcode is set
@@ -10,20 +12,18 @@ import ForecastDisplay from "./ForecastDisplay";
  * default to current
  */
 
-export const ZipcodeContext = React.createContext<string | null>(null);
-
 const App: React.FC = () => {
-  const [zipcode, setZipcode] = useState<string | null>(null);
-  const { Provider } = ZipcodeContext;
-  console.log(zipcode);
+  const zipcode = useZipcode();
+  const error = useError();
+
   return (
     <div data-testid="_App_">
-      <LocationForm setZipcode={setZipcode} />
-      {zipcode && (
-        <Provider value={zipcode}>
-          <ForecastDisplay />
-        </Provider>
-      )}
+      <zipcodeContext.Provider value={zipcode}>
+        <errorContext.Provider value={error}>
+          <LocationForm />
+          {zipcode.zipcode && <ForecastDisplay />}
+        </errorContext.Provider>
+      </zipcodeContext.Provider>
     </div>
   );
 };
