@@ -1,33 +1,41 @@
-import React, { SetStateAction } from "react";
+import React, { useContext, useMemo } from "react";
 import { useForm } from "react-hook-form";
-// import styled from "styled-components";
-
+import * as yup from "yup";
 import SetZipcodeButton from "./SetZipcodeButton";
-
-interface Props {
-  setZipcode: React.Dispatch<SetStateAction<string | null>>;
-}
-
-// Please enter your zipcode: []
-// zip should error if can't parseInt
+import { zipcodeContext } from "./utils/context";
+import { useYupValidationResolver } from "./utils/yup";
 
 /**
  * TODO
  * Add error message
  */
 
-const LocationForm: React.FC<Props> = ({ setZipcode }) => {
-  const { register, handleSubmit } = useForm();
+// https://react-hook-form.com/advanced-usage/
 
-  const onSubmit = ({ zipcode }: any) => {
-    const validZipcode = parseInt(zipcode);
-    console.log(validZipcode, zipcode);
+const LocationForm: React.FC = () => {
+  const { setCurrentZipcode } = useContext(zipcodeContext);
+  const validationSchema = useMemo(
+    () =>
+      yup.object({
+        zipcode: yup
+          .number()
+          .required("Required")
+          .positive()
+          .test(
+            "len",
+            "Must be exactly 5 characters",
+            (val) => val?.toString().length === 5
+          ),
+      }),
+    []
+  );
 
-    if (validZipcode) {
-      return setZipcode(zipcode);
-    }
+  const resolver = useYupValidationResolver(validationSchema);
 
-    console.log("Invalid zipcode");
+  const { errors, register, handleSubmit } = useForm({ resolver });
+
+  const onSubmit = async ({ zipcode }: any) => {
+    setCurrentZipcode(zipcode);
   };
 
   return (
@@ -43,6 +51,7 @@ const LocationForm: React.FC<Props> = ({ setZipcode }) => {
           ref={register}
         />
         <SetZipcodeButton text="show forecasts" />
+        {errors.zipcode && <div>Please enter a valid zipcode.</div>}
       </form>
     </div>
   );
